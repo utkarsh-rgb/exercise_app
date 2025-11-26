@@ -36,32 +36,31 @@
             transform: scale(0.98);
         }
 
-        /* Gradient backgrounds */
-        .gradient-bg {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        /* Subtle color backgrounds */
+        .bg-primary {
+            background-color: #3b82f6;
         }
 
-        .gradient-red {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        .bg-secondary {
+            background-color: #6366f1;
         }
 
-        .gradient-green {
-            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        .bg-success {
+            background-color: #10b981;
         }
 
-        .gradient-yellow {
-            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        .bg-warning {
+            background-color: #f59e0b;
         }
 
-        .gradient-indigo {
-            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        .bg-danger {
+            background-color: #ef4444;
         }
 
         /* Input focus effects */
         input:focus, select:focus, textarea:focus {
             outline: none;
-            ring: 2px;
-            ring-color: #667eea;
+            border-color: #3b82f6;
         }
 
         /* Custom scrollbar */
@@ -70,30 +69,16 @@
         }
 
         ::-webkit-scrollbar-track {
-            background: #1f2937;
+            background: #f3f4f6;
         }
 
         ::-webkit-scrollbar-thumb {
-            background: #4b5563;
+            background: #d1d5db;
             border-radius: 4px;
         }
 
         ::-webkit-scrollbar-thumb:hover {
-            background: #6b7280;
-        }
-
-        /* Pulse animation */
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 1;
-            }
-            50% {
-                opacity: 0.5;
-            }
-        }
-
-        .animate-pulse-slow {
-            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+            background: #9ca3af;
         }
 
         /* Slide up animation */
@@ -111,7 +96,14 @@
         .slide-up {
             animation: slideUp 0.5s ease-out;
         }
+
+        /* Fixed chart container */
+        .chart-container {
+            position: relative;
+            height: 250px;
+            width: 100%;
+        }
     </style>
 </head>
 
-<body class="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white min-h-screen flex flex-col">
+<body class="bg-gray-50 text-gray-900 min-h-screen flex flex-col">

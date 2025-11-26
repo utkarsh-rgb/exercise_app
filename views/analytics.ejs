@@ -7,7 +7,7 @@
 
 <!-- Back Button -->
 <div class="mb-4">
-    <a href="/" class="inline-flex items-center gap-2 text-gray-400 hover:text-white smooth-transition text-sm">
+    <a href="/" class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 smooth-transition text-sm">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
         </svg>
@@ -17,22 +17,22 @@
 
 <!-- Page Header -->
 <div class="mb-5">
-    <h2 class="text-xl md:text-2xl font-bold mb-1 flex items-center gap-2">
-        <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <h2 class="text-xl md:text-2xl font-bold mb-1 flex items-center gap-2 text-gray-900">
+        <svg class="w-6 h-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
         </svg>
         Analytics Dashboard
     </h2>
-    <p class="text-gray-400 text-sm">Track your fitness progress</p>
+    <p class="text-gray-600 text-sm">Track your fitness progress</p>
 </div>
 
 <% if (weightData.length === 0 && workoutLogs.length === 0) { %>
 <!-- Empty State -->
-<div class="bg-gray-800/30 backdrop-blur-lg rounded-xl border border-gray-700/50 p-8 text-center">
-    <svg class="w-12 h-12 mx-auto mb-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div class="bg-white rounded-xl border border-gray-200 p-8 text-center shadow-sm">
+    <svg class="w-12 h-12 mx-auto mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
     </svg>
-    <p class="text-gray-400 text-sm">No data yet. Start tracking your workouts and weight!</p>
+    <p class="text-gray-600 text-sm">No data yet. Start tracking your workouts and weight!</p>
 </div>
 <% } else { %>
 
@@ -41,65 +41,71 @@
 
     <!-- Weight Progress Chart -->
     <% if (weightData.length > 0) { %>
-    <div class="bg-gray-800/30 backdrop-blur-lg rounded-xl border border-gray-700/50 p-4">
-        <h3 class="text-sm font-semibold mb-3 text-gray-300 flex items-center gap-2">
-            <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <h3 class="text-sm font-semibold mb-3 text-gray-700 flex items-center gap-2">
+            <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
             </svg>
             Weight Progress
         </h3>
-        <canvas id="weightChart" height="200"></canvas>
+        <div class="chart-container">
+            <canvas id="weightChart"></canvas>
+        </div>
     </div>
     <% } %>
 
     <!-- BMI Progress Chart -->
     <% if (weightData.length > 0) { %>
-    <div class="bg-gray-800/30 backdrop-blur-lg rounded-xl border border-gray-700/50 p-4">
-        <h3 class="text-sm font-semibold mb-3 text-gray-300 flex items-center gap-2">
-            <svg class="w-4 h-4 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <h3 class="text-sm font-semibold mb-3 text-gray-700 flex items-center gap-2">
+            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path>
             </svg>
             BMI Trend
         </h3>
-        <canvas id="bmiChart" height="200"></canvas>
+        <div class="chart-container">
+            <canvas id="bmiChart"></canvas>
+        </div>
     </div>
     <% } %>
 
     <!-- Muscle Group Distribution -->
     <% if (muscleDistribution.length > 0) { %>
-    <div class="bg-gray-800/30 backdrop-blur-lg rounded-xl border border-gray-700/50 p-4">
-        <h3 class="text-sm font-semibold mb-3 text-gray-300 flex items-center gap-2">
-            <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <h3 class="text-sm font-semibold mb-3 text-gray-700 flex items-center gap-2">
+            <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path>
             </svg>
             Muscle Group Distribution
         </h3>
-        <canvas id="muscleChart" height="200"></canvas>
+        <div class="chart-container">
+            <canvas id="muscleChart"></canvas>
+        </div>
     </div>
     <% } %>
 
-    <!-- Workout Frequency -->
+    <!-- Recent Activity Stats -->
     <% if (workoutLogs.length > 0) { %>
-    <div class="bg-gray-800/30 backdrop-blur-lg rounded-xl border border-gray-700/50 p-4">
-        <h3 class="text-sm font-semibold mb-3 text-gray-300 flex items-center gap-2">
-            <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+        <h3 class="text-sm font-semibold mb-3 text-gray-700 flex items-center gap-2">
+            <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
             </svg>
             Recent Activity
         </h3>
-        <div class="space-y-2">
+        <div class="space-y-3">
             <div class="flex justify-between items-center text-xs">
-                <span class="text-gray-400">Total Workouts</span>
-                <span class="font-bold text-white"><%= workoutLogs.length %></span>
+                <span class="text-gray-600">Total Workouts</span>
+                <span class="font-bold text-gray-900"><%= workoutLogs.length %></span>
             </div>
             <div class="flex justify-between items-center text-xs">
-                <span class="text-gray-400">Most Trained</span>
-                <span class="font-bold text-purple-400"><%= muscleDistribution[0]?.muscle || 'N/A' %></span>
+                <span class="text-gray-600">Most Trained</span>
+                <span class="font-bold text-purple-600"><%= muscleDistribution[0]?.muscle || 'N/A' %></span>
             </div>
             <div class="flex justify-between items-center text-xs">
-                <span class="text-gray-400">Latest Workout</span>
-                <span class="font-bold text-blue-400">
+                <span class="text-gray-600">Latest Workout</span>
+                <span class="font-bold text-blue-600">
                     <%= workoutLogs[0]?.date.toISOString().split('T')[0] || 'N/A' %>
                 </span>
             </div>
@@ -109,11 +115,39 @@
 
 </div>
 
+<!-- Muscle Progression Filter -->
+<% if (workoutLogs.length > 0) { %>
+<div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm mb-4">
+    <h3 class="text-sm font-semibold mb-3 text-gray-700 flex items-center gap-2">
+        <svg class="w-4 h-4 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+        </svg>
+        Muscle Progression
+    </h3>
+
+    <div class="mb-3">
+        <label class="block text-xs font-medium text-gray-600 mb-2">Select Muscle Group</label>
+        <select id="muscleFilter"
+                class="w-full md:w-64 p-2 text-sm rounded-lg border border-gray-300 bg-white text-gray-900 focus:border-blue-500"
+                onchange="updateMuscleProgression()">
+            <option value="">All Muscles</option>
+            <% muscleDistribution.forEach(m => { %>
+            <option value="<%= m.muscle %>"><%= m.muscle %></option>
+            <% }) %>
+        </select>
+    </div>
+
+    <div class="chart-container">
+        <canvas id="muscleProgressionChart"></canvas>
+    </div>
+</div>
+<% } %>
+
 <!-- Workout Logs Table -->
 <% if (workoutLogs.length > 0) { %>
-<div class="bg-gray-800/30 backdrop-blur-lg rounded-xl border border-gray-700/50 p-4">
-    <h3 class="text-sm font-semibold mb-3 text-gray-300 flex items-center gap-2">
-        <svg class="w-4 h-4 text-pink-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+<div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+    <h3 class="text-sm font-semibold mb-3 text-gray-700 flex items-center gap-2">
+        <svg class="w-4 h-4 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
         </svg>
         Workout History
@@ -122,7 +156,7 @@
     <div class="overflow-x-auto">
         <table class="w-full text-xs">
             <thead>
-                <tr class="text-gray-400 border-b border-gray-700">
+                <tr class="text-gray-600 border-b border-gray-200">
                     <th class="text-left py-2 px-2 font-medium">Date</th>
                     <th class="text-left py-2 px-2 font-medium">Exercise</th>
                     <th class="text-left py-2 px-2 font-medium">Muscle</th>
@@ -133,23 +167,23 @@
             </thead>
             <tbody>
                 <% workoutLogs.slice(0, 20).forEach((log, index) => { %>
-                <tr class="border-b border-gray-800/50 hover:bg-gray-800/30 smooth-transition">
-                    <td class="py-2 px-2 text-gray-400">
+                <tr class="border-b border-gray-100 hover:bg-gray-50 smooth-transition">
+                    <td class="py-2 px-2 text-gray-600">
                         <%= log.date.toISOString().split('T')[0] %>
                     </td>
-                    <td class="py-2 px-2 text-white font-medium">
+                    <td class="py-2 px-2 text-gray-900 font-medium">
                         <%= log.exercise %>
                     </td>
                     <td class="py-2 px-2">
-                        <span class="text-purple-400"><%= log.muscle %></span>
+                        <span class="text-purple-600"><%= log.muscle %></span>
                     </td>
-                    <td class="py-2 px-2 text-center text-blue-400">
+                    <td class="py-2 px-2 text-center text-blue-600">
                         <%= log.sets %>
                     </td>
-                    <td class="py-2 px-2 text-center text-green-400">
+                    <td class="py-2 px-2 text-center text-green-600">
                         <%= log.reps %>
                     </td>
-                    <td class="py-2 px-2 text-center text-yellow-400 font-medium">
+                    <td class="py-2 px-2 text-center text-orange-600 font-medium">
                         <%= log.weight %> kg
                     </td>
                 </tr>
@@ -169,6 +203,9 @@
 <% } %>
 
 <script>
+    // All workout data for filtering
+    const allWorkoutData = <%- JSON.stringify(workoutLogs) %>;
+
     // Chart.js configuration for minimal, light theme
     const chartConfig = {
         responsive: true,
@@ -182,11 +219,11 @@
             y: {
                 beginAtZero: false,
                 grid: {
-                    color: 'rgba(107, 114, 128, 0.1)',
+                    color: '#e5e7eb',
                     drawBorder: false
                 },
                 ticks: {
-                    color: '#9CA3AF',
+                    color: '#6b7280',
                     font: { size: 10 }
                 }
             },
@@ -195,7 +232,7 @@
                     display: false
                 },
                 ticks: {
-                    color: '#9CA3AF',
+                    color: '#6b7280',
                     font: { size: 9 },
                     maxRotation: 45,
                     minRotation: 45
@@ -214,8 +251,8 @@
             datasets: [{
                 label: 'Weight (kg)',
                 data: <%- JSON.stringify(weightData.map(d => d.weight)) %>,
-                borderColor: 'rgb(96, 165, 250)',
-                backgroundColor: 'rgba(96, 165, 250, 0.1)',
+                borderColor: '#3b82f6',
+                backgroundColor: 'rgba(59, 130, 246, 0.1)',
                 borderWidth: 2,
                 tension: 0.3,
                 fill: true,
@@ -228,10 +265,10 @@
             plugins: {
                 ...chartConfig.plugins,
                 tooltip: {
-                    backgroundColor: 'rgba(31, 41, 55, 0.9)',
-                    titleColor: '#fff',
-                    bodyColor: '#9CA3AF',
-                    borderColor: 'rgba(107, 114, 128, 0.3)',
+                    backgroundColor: '#ffffff',
+                    titleColor: '#111827',
+                    bodyColor: '#6b7280',
+                    borderColor: '#e5e7eb',
                     borderWidth: 1,
                     padding: 8,
                     titleFont: { size: 11 },
@@ -250,8 +287,8 @@
             datasets: [{
                 label: 'BMI',
                 data: <%- JSON.stringify(weightData.map(d => parseFloat(d.bmi))) %>,
-                borderColor: 'rgb(74, 222, 128)',
-                backgroundColor: 'rgba(74, 222, 128, 0.1)',
+                borderColor: '#10b981',
+                backgroundColor: 'rgba(16, 185, 129, 0.1)',
                 borderWidth: 2,
                 tension: 0.3,
                 fill: true,
@@ -264,10 +301,10 @@
             plugins: {
                 ...chartConfig.plugins,
                 tooltip: {
-                    backgroundColor: 'rgba(31, 41, 55, 0.9)',
-                    titleColor: '#fff',
-                    bodyColor: '#9CA3AF',
-                    borderColor: 'rgba(107, 114, 128, 0.3)',
+                    backgroundColor: '#ffffff',
+                    titleColor: '#111827',
+                    bodyColor: '#6b7280',
+                    borderColor: '#e5e7eb',
                     borderWidth: 1,
                     padding: 8,
                     titleFont: { size: 11 },
@@ -282,14 +319,14 @@
     // Muscle Distribution Chart
     const muscleCtx = document.getElementById('muscleChart').getContext('2d');
     const muscleColors = [
-        'rgba(147, 51, 234, 0.8)',  // purple
-        'rgba(236, 72, 153, 0.8)',  // pink
-        'rgba(59, 130, 246, 0.8)',  // blue
-        'rgba(34, 197, 94, 0.8)',   // green
-        'rgba(251, 146, 60, 0.8)',  // orange
-        'rgba(234, 179, 8, 0.8)',   // yellow
-        'rgba(14, 165, 233, 0.8)',  // cyan
-        'rgba(168, 85, 247, 0.8)'   // violet
+        '#6366f1',  // indigo
+        '#ec4899',  // pink
+        '#3b82f6',  // blue
+        '#10b981',  // green
+        '#f97316',  // orange
+        '#eab308',  // yellow
+        '#06b6d4',  // cyan
+        '#a855f7'   // purple
     ];
 
     new Chart(muscleCtx, {
@@ -299,7 +336,8 @@
             datasets: [{
                 data: <%- JSON.stringify(muscleDistribution.map(m => m.count)) %>,
                 backgroundColor: muscleColors,
-                borderWidth: 0
+                borderWidth: 2,
+                borderColor: '#ffffff'
             }]
         },
         options: {
@@ -310,7 +348,7 @@
                     display: true,
                     position: 'right',
                     labels: {
-                        color: '#9CA3AF',
+                        color: '#6b7280',
                         font: { size: 10 },
                         padding: 8,
                         boxWidth: 12,
@@ -318,10 +356,10 @@
                     }
                 },
                 tooltip: {
-                    backgroundColor: 'rgba(31, 41, 55, 0.9)',
-                    titleColor: '#fff',
-                    bodyColor: '#9CA3AF',
-                    borderColor: 'rgba(107, 114, 128, 0.3)',
+                    backgroundColor: '#ffffff',
+                    titleColor: '#111827',
+                    bodyColor: '#6b7280',
+                    borderColor: '#e5e7eb',
                     borderWidth: 1,
                     padding: 8,
                     titleFont: { size: 11 },
@@ -330,6 +368,104 @@
             }
         }
     });
+    <% } %>
+
+    // Muscle Progression Chart
+    let muscleProgressionChart;
+
+    function updateMuscleProgression() {
+        const selectedMuscle = document.getElementById('muscleFilter').value;
+
+        // Filter workout data by selected muscle
+        let filteredData = allWorkoutData;
+        if (selectedMuscle) {
+            filteredData = allWorkoutData.filter(log => log.muscle === selectedMuscle);
+        }
+
+        // Group by date and calculate max weight
+        const progressionMap = {};
+        filteredData.forEach(log => {
+            const date = new Date(log.date).toISOString().split('T')[0];
+            if (!progressionMap[date] || progressionMap[date] < log.weight) {
+                progressionMap[date] = log.weight;
+            }
+        });
+
+        const dates = Object.keys(progressionMap).sort();
+        const weights = dates.map(date => progressionMap[date]);
+
+        // Destroy existing chart if it exists
+        if (muscleProgressionChart) {
+            muscleProgressionChart.destroy();
+        }
+
+        // Create new chart
+        const ctx = document.getElementById('muscleProgressionChart').getContext('2d');
+        muscleProgressionChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: dates,
+                datasets: [{
+                    label: selectedMuscle || 'All Muscles',
+                    data: weights,
+                    borderColor: '#6366f1',
+                    backgroundColor: 'rgba(99, 102, 241, 0.1)',
+                    borderWidth: 2,
+                    tension: 0.3,
+                    fill: true,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                ...chartConfig,
+                scales: {
+                    y: {
+                        ...chartConfig.scales.y,
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Max Weight (kg)',
+                            color: '#6b7280',
+                            font: { size: 11 }
+                        }
+                    },
+                    x: {
+                        ...chartConfig.scales.x,
+                        title: {
+                            display: true,
+                            text: 'Date',
+                            color: '#6b7280',
+                            font: { size: 11 }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        labels: {
+                            color: '#6b7280',
+                            font: { size: 10 }
+                        }
+                    },
+                    tooltip: {
+                        backgroundColor: '#ffffff',
+                        titleColor: '#111827',
+                        bodyColor: '#6b7280',
+                        borderColor: '#e5e7eb',
+                        borderWidth: 1,
+                        padding: 8,
+                        titleFont: { size: 11 },
+                        bodyFont: { size: 10 }
+                    }
+                }
+            }
+        });
+    }
+
+    // Initialize muscle progression chart
+    <% if (workoutLogs.length > 0) { %>
+    updateMuscleProgression();
     <% } %>
 </script>
 

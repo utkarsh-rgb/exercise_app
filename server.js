@@ -120,14 +120,21 @@ app.get("/workout/:category/:muscleId", async (req, res) => {
 });
 
 
-// LOG EXERCISE
+// LOG EXERCISE (with individual sets)
 app.post("/log-exercise", async (req, res) => {
-    const { date, category, muscle, exercise, sets, reps, weight } = req.body;
+    const { date, category, muscle, exercise, reps, weight } = req.body;
 
-    await db.query(
-        "INSERT INTO exercises (date, category, muscle, exercise, sets, reps, weight) VALUES (?, ?, ?, ?, ?, ?, ?)",
-        [date, category, muscle, exercise, sets, reps, weight]
-    );
+    // Handle multiple sets - reps and weight are arrays
+    const repsArray = Array.isArray(reps) ? reps : [reps];
+    const weightArray = Array.isArray(weight) ? weight : [weight];
+
+    // Insert each set as a separate record
+    for (let i = 0; i < repsArray.length; i++) {
+        await db.query(
+            "INSERT INTO exercises (date, category, muscle, exercise, sets, reps, weight) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [date, category, muscle, exercise, i + 1, repsArray[i], weightArray[i]]
+        );
+    }
 
     res.redirect("/");
 });

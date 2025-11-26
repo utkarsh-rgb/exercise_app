@@ -17,10 +17,11 @@ app.get("/", async (req, res) => {
         );
 
         const [logs] = await db.query(
-            "SELECT * FROM exercises ORDER BY date DESC"
+            "SELECT * FROM exercises ORDER BY date DESC, id DESC"
         );
 
         let weight = weightRows.length ? weightRows[0].weight : null;
+        let weightDate = weightRows.length ? weightRows[0].date : null;
         let bmi = null;
 
         if (weight) {
@@ -31,6 +32,7 @@ app.get("/", async (req, res) => {
         res.render("index", {
             profile: USER_PROFILE,
             currentWeight: weight,
+            weightDate,
             bmi,
             logs
         });
@@ -69,6 +71,32 @@ app.get("/profile", async (req, res) => {
             currentWeight: null,
             bmi: null
         });
+    }
+});
+
+
+// UPDATE PROFILE (HEIGHT & WEIGHT)
+app.post("/update-profile", async (req, res) => {
+    const { height, weight, date } = req.body;
+
+    try {
+        // Update height in USER_PROFILE (in-memory for now)
+        if (height) {
+            USER_PROFILE.height = parseInt(height);
+        }
+
+        // Update weight in database if provided
+        if (weight && date) {
+            await db.query(
+                "INSERT INTO daily_weight (date, weight) VALUES (?, ?) ON DUPLICATE KEY UPDATE weight = ?",
+                [date, weight, weight]
+            );
+        }
+
+        res.redirect("/profile");
+    } catch (err) {
+        console.error("Update Profile Error:", err);
+        res.redirect("/profile");
     }
 });
 
@@ -224,9 +252,13 @@ app.get("/analytics", async (req, res) => {
 app.get("/admin/database", async (req, res) => {
     try {
         const [muscles] = await db.query("SELECT * FROM muscles ORDER BY category, muscle_name");
+        const [exercises] = await db.query(
+            "SELECT el.*, m.muscle_name, m.category FROM exercise_library el LEFT JOIN muscles m ON el.muscle_id = m.id ORDER BY m.category, m.muscle_name, el.exercise_name"
+        );
 
         res.render("admin-database", {
             muscles,
+            exercises,
             muscleSuccess: false,
             exerciseSuccess: false
         });
@@ -280,6 +312,66 @@ app.post("/admin/add-exercise", async (req, res) => {
         });
     } catch (err) {
         console.error("Add Exercise Error:", err);
+        res.redirect("/admin/database");
+    }
+});
+
+
+// DELETE MUSCLE (ADMIN)
+app.post("/admin/delete-muscle/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        await db.query("DELETE FROM muscles WHERE id = ?", [id]);
+        res.redirect("/admin/database");
+    } catch (err) {
+        console.error("Delete Muscle Error:", err);
+        res.redirect("/admin/database");
+    }
+});
+
+
+// DELETE EXERCISE (ADMIN)
+app.post("/admin/delete-exercise/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        await db.query("DELETE FROM exercise_library WHERE id = ?", [id]);
+        res.redirect("/admin/database");
+    } catch (err) {
+        console.error("Delete Exercise Error:", err);
+        res.redirect("/admin/database");
+    }
+});
+
+
+// UPDATE MUSCLE (ADMIN)
+app.post("/admin/update-muscle/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { category, muscle_name } = req.body;
+        await db.query(
+            "UPDATE muscles SET category = ?, muscle_name = ? WHERE id = ?",
+            [category, muscle_name, id]
+        );
+        res.redirect("/admin/database");
+    } catch (err) {
+        console.error("Update Muscle Error:", err);
+        res.redirect("/admin/database");
+    }
+});
+
+
+// UPDATE EXERCISE (ADMIN)
+app.post("/admin/update-exercise/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { muscle_id, exercise_name } = req.body;
+        await db.query(
+            "UPDATE exercise_library SET muscle_id = ?, exercise_name = ? WHERE id = ?",
+            [muscle_id, exercise_name, id]
+        );
+        res.redirect("/admin/database");
+    } catch (err) {
+        console.error("Update Exercise Error:", err);
         res.redirect("/admin/database");
     }
 });

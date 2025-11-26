@@ -146,6 +146,71 @@ app.post("/add-custom-exercise", async (req, res) => {
 });
 
 
+// ADMIN DATABASE MANAGEMENT PAGE
+app.get("/admin/database", async (req, res) => {
+    try {
+        const [muscles] = await db.query("SELECT * FROM muscles ORDER BY category, muscle_name");
+
+        res.render("admin-database", {
+            muscles,
+            muscleSuccess: false,
+            exerciseSuccess: false
+        });
+    } catch (err) {
+        console.error("Admin Database Error:", err);
+        res.send("Error loading admin page");
+    }
+});
+
+
+// ADD MUSCLE GROUP (ADMIN)
+app.post("/admin/add-muscle", async (req, res) => {
+    try {
+        const { category, muscle_name } = req.body;
+
+        await db.query(
+            "INSERT INTO muscles (category, muscle_name) VALUES (?, ?)",
+            [category, muscle_name]
+        );
+
+        const [muscles] = await db.query("SELECT * FROM muscles ORDER BY category, muscle_name");
+
+        res.render("admin-database", {
+            muscles,
+            muscleSuccess: true,
+            exerciseSuccess: false
+        });
+    } catch (err) {
+        console.error("Add Muscle Error:", err);
+        res.redirect("/admin/database");
+    }
+});
+
+
+// ADD EXERCISE (ADMIN)
+app.post("/admin/add-exercise", async (req, res) => {
+    try {
+        const { muscle_id, exercise_name } = req.body;
+
+        await db.query(
+            "INSERT INTO exercise_library (muscle_id, exercise_name) VALUES (?, ?)",
+            [muscle_id, exercise_name]
+        );
+
+        const [muscles] = await db.query("SELECT * FROM muscles ORDER BY category, muscle_name");
+
+        res.render("admin-database", {
+            muscles,
+            muscleSuccess: false,
+            exerciseSuccess: true
+        });
+    } catch (err) {
+        console.error("Add Exercise Error:", err);
+        res.redirect("/admin/database");
+    }
+});
+
+
 app.listen(3000, () =>
     console.log("Server running at http://localhost:3000")
 );

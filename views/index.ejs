@@ -2,9 +2,17 @@
 <%- include("partials/header") %>
 
 <!-- Welcome Section -->
-<div class="mb-6">
-    <h2 class="text-2xl md:text-3xl font-bold mb-2">Welcome Back!</h2>
-    <p class="text-gray-400">Ready to crush your workout?</p>
+<div class="mb-6 flex justify-between items-start">
+    <div>
+        <h2 class="text-2xl md:text-3xl font-bold mb-2">Welcome Back!</h2>
+        <p class="text-gray-400">Ready to crush your workout?</p>
+    </div>
+    <a href="/admin/database" class="bg-gradient-to-r from-green-500 to-emerald-600 px-4 py-2 rounded-xl shadow-lg smooth-transition hover:shadow-xl hover:scale-105 flex items-center gap-2 text-sm">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4"></path>
+        </svg>
+        <span class="hidden sm:inline font-medium">Manage DB</span>
+    </a>
 </div>
 
 <!-- Stats Card -->

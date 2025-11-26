@@ -169,6 +169,50 @@ app.post("/add-muscle", async (req, res) => {
 });
 
 
+// ANALYTICS PAGE
+app.get("/analytics", async (req, res) => {
+    try {
+        // Get weight history
+        const [weightHistory] = await db.query(
+            "SELECT date, weight FROM daily_weight ORDER BY date ASC"
+        );
+
+        // Calculate BMI for each weight entry
+        const weightData = weightHistory.map(row => ({
+            date: row.date.toISOString().split('T')[0],
+            weight: row.weight,
+            bmi: (row.weight / Math.pow(USER_PROFILE.height / 100, 2)).toFixed(1)
+        }));
+
+        // Get muscle group workout distribution
+        const [muscleDistribution] = await db.query(
+            "SELECT muscle, COUNT(*) as count FROM exercises GROUP BY muscle ORDER BY count DESC"
+        );
+
+        // Get recent workout logs with progression
+        const [workoutLogs] = await db.query(
+            "SELECT date, category, muscle, exercise, sets, reps, weight FROM exercises ORDER BY date DESC LIMIT 50"
+        );
+
+        // Get exercise progression (track max weight for each exercise over time)
+        const [exerciseProgression] = await db.query(
+            "SELECT exercise, date, MAX(weight) as max_weight FROM exercises GROUP BY exercise, date ORDER BY date ASC"
+        );
+
+        res.render("analytics", {
+            profile: USER_PROFILE,
+            weightData,
+            muscleDistribution,
+            workoutLogs,
+            exerciseProgression
+        });
+    } catch (err) {
+        console.error("Analytics Error:", err);
+        res.send("Error loading analytics page");
+    }
+});
+
+
 // ADMIN DATABASE MANAGEMENT PAGE
 app.get("/admin/database", async (req, res) => {
     try {

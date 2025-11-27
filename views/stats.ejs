@@ -37,17 +37,17 @@
     <% } else { %>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <% personalRecords.forEach(pr => { %>
-            <div class="bg-gradient-to-br from-yellow-900/30 to-gray-800/50 backdrop-blur-lg p-4 rounded-xl border border-yellow-500/30 shadow-lg">
+            <div class="bg-gradient-to-br from-yellow-500/20 to-orange-500/10 backdrop-blur-lg p-4 rounded-xl border border-yellow-400/40 shadow-lg hover:shadow-xl smooth-transition">
                 <h4 class="font-bold text-white mb-1"><%= pr.exercise %></h4>
                 <% if (pr.muscle_name) { %>
-                    <p class="text-xs text-gray-400 mb-2"><%= pr.muscle_name %></p>
+                    <p class="text-xs text-yellow-300/80 mb-2"><%= pr.muscle_name %></p>
                 <% } %>
                 <div class="flex items-end justify-between">
                     <div>
-                        <p class="text-3xl font-bold text-yellow-400"><%= pr.max_weight %> <span class="text-lg">kg</span></p>
-                        <p class="text-xs text-gray-500 mt-1"><%= pr.formattedDate %></p>
+                        <p class="text-3xl font-bold text-yellow-300"><%= pr.max_weight %> <span class="text-lg">kg</span></p>
+                        <p class="text-xs text-gray-300/70 mt-1"><%= pr.formattedDate %></p>
                     </div>
-                    <svg class="w-10 h-10 text-yellow-400/20" fill="currentColor" viewBox="0 0 24 24">
+                    <svg class="w-10 h-10 text-yellow-400/30" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
                     </svg>
                 </div>
@@ -70,24 +70,24 @@
             <p class="text-gray-400">No workout data available yet.</p>
         </div>
     <% } else { %>
-        <div class="bg-gray-800/70 backdrop-blur-lg rounded-xl border border-gray-700 overflow-hidden">
+        <div class="bg-gradient-to-br from-blue-500/10 to-indigo-500/5 backdrop-blur-lg rounded-xl border border-blue-400/30 overflow-hidden shadow-lg">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
-                    <thead class="bg-gray-900/50">
+                    <thead class="bg-blue-500/20">
                         <tr>
-                            <th class="px-4 py-3 text-left text-gray-400 font-semibold">Date</th>
-                            <th class="px-4 py-3 text-center text-gray-400 font-semibold">Sets</th>
-                            <th class="px-4 py-3 text-center text-gray-400 font-semibold">Reps</th>
-                            <th class="px-4 py-3 text-right text-gray-400 font-semibold">Total Volume (kg)</th>
+                            <th class="px-4 py-3 text-left text-gray-200 font-semibold">Date</th>
+                            <th class="px-4 py-3 text-center text-gray-200 font-semibold">Sets</th>
+                            <th class="px-4 py-3 text-center text-gray-200 font-semibold">Reps</th>
+                            <th class="px-4 py-3 text-right text-gray-200 font-semibold">Total Volume (kg)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% dailyTotals.forEach((dt, index) => { %>
-                        <tr class="border-t border-gray-700 hover:bg-gray-900/30 smooth-transition">
+                        <tr class="border-t border-blue-400/20 hover:bg-blue-500/10 smooth-transition">
                             <td class="px-4 py-3 text-white"><%= dt.formattedDate %></td>
-                            <td class="px-4 py-3 text-center text-purple-400 font-semibold"><%= dt.total_sets %></td>
-                            <td class="px-4 py-3 text-center text-blue-400 font-semibold"><%= dt.total_reps %></td>
-                            <td class="px-4 py-3 text-right text-green-400 font-bold"><%= Math.round(dt.total_volume) %></td>
+                            <td class="px-4 py-3 text-center text-purple-300 font-semibold"><%= dt.total_sets %></td>
+                            <td class="px-4 py-3 text-center text-blue-300 font-semibold"><%= dt.total_reps %></td>
+                            <td class="px-4 py-3 text-right text-green-300 font-bold"><%= Math.round(dt.total_volume) %></td>
                         </tr>
                         <% }) %>
                     </tbody>
@@ -112,25 +112,25 @@
     <% } else { %>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             <% weeklySummary.forEach(ws => { %>
-            <div class="bg-gradient-to-br from-gray-800/90 to-gray-800/50 backdrop-blur-lg p-5 rounded-xl border border-gray-700 shadow-lg">
+            <div class="bg-gradient-to-br from-green-500/15 to-emerald-500/10 backdrop-blur-lg p-5 rounded-xl border border-green-400/30 shadow-lg hover:shadow-xl smooth-transition">
                 <div class="flex items-center justify-between mb-3">
                     <h4 class="font-bold text-white">Week <%= ws.week %>, <%= ws.year %></h4>
-                    <span class="bg-green-500/20 text-green-400 px-3 py-1 rounded-full text-xs font-semibold">
+                    <span class="bg-green-400/30 text-green-200 px-3 py-1 rounded-full text-xs font-semibold">
                         <%= ws.workout_days %> days
                     </span>
                 </div>
                 <div class="grid grid-cols-3 gap-3 text-center">
-                    <div class="bg-gray-900/50 rounded-lg p-2">
-                        <p class="text-xs text-gray-400 mb-1">Sets</p>
-                        <p class="text-lg font-bold text-purple-400"><%= ws.total_sets %></p>
+                    <div class="bg-white/5 rounded-lg p-2">
+                        <p class="text-xs text-gray-300 mb-1">Sets</p>
+                        <p class="text-lg font-bold text-purple-300"><%= ws.total_sets %></p>
                     </div>
-                    <div class="bg-gray-900/50 rounded-lg p-2">
-                        <p class="text-xs text-gray-400 mb-1">Reps</p>
-                        <p class="text-lg font-bold text-blue-400"><%= ws.total_reps %></p>
+                    <div class="bg-white/5 rounded-lg p-2">
+                        <p class="text-xs text-gray-300 mb-1">Reps</p>
+                        <p class="text-lg font-bold text-blue-300"><%= ws.total_reps %></p>
                     </div>
-                    <div class="bg-gray-900/50 rounded-lg p-2">
-                        <p class="text-xs text-gray-400 mb-1">Volume</p>
-                        <p class="text-lg font-bold text-green-400"><%= Math.round(ws.total_volume / 1000) %>k</p>
+                    <div class="bg-white/5 rounded-lg p-2">
+                        <p class="text-xs text-gray-300 mb-1">Volume</p>
+                        <p class="text-lg font-bold text-green-300"><%= Math.round(ws.total_volume / 1000) %>k</p>
                     </div>
                 </div>
             </div>
@@ -152,26 +152,26 @@
             <p class="text-gray-400">No monthly data available yet.</p>
         </div>
     <% } else { %>
-        <div class="bg-gray-800/70 backdrop-blur-lg rounded-xl border border-gray-700 overflow-hidden">
+        <div class="bg-gradient-to-br from-pink-500/10 to-purple-500/5 backdrop-blur-lg rounded-xl border border-pink-400/30 overflow-hidden shadow-lg">
             <div class="overflow-x-auto">
                 <table class="w-full text-sm">
-                    <thead class="bg-gray-900/50">
+                    <thead class="bg-pink-500/20">
                         <tr>
-                            <th class="px-4 py-3 text-left text-gray-400 font-semibold">Month</th>
-                            <th class="px-4 py-3 text-center text-gray-400 font-semibold">Workout Days</th>
-                            <th class="px-4 py-3 text-center text-gray-400 font-semibold">Total Sets</th>
-                            <th class="px-4 py-3 text-center text-gray-400 font-semibold">Total Reps</th>
-                            <th class="px-4 py-3 text-right text-gray-400 font-semibold">Total Volume (kg)</th>
+                            <th class="px-4 py-3 text-left text-gray-200 font-semibold">Month</th>
+                            <th class="px-4 py-3 text-center text-gray-200 font-semibold">Workout Days</th>
+                            <th class="px-4 py-3 text-center text-gray-200 font-semibold">Total Sets</th>
+                            <th class="px-4 py-3 text-center text-gray-200 font-semibold">Total Reps</th>
+                            <th class="px-4 py-3 text-right text-gray-200 font-semibold">Total Volume (kg)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% monthlySummary.forEach(ms => { %>
-                        <tr class="border-t border-gray-700 hover:bg-gray-900/30 smooth-transition">
+                        <tr class="border-t border-pink-400/20 hover:bg-pink-500/10 smooth-transition">
                             <td class="px-4 py-3 text-white font-semibold"><%= ms.month_name %> <%= ms.year %></td>
-                            <td class="px-4 py-3 text-center text-green-400 font-semibold"><%= ms.workout_days %></td>
-                            <td class="px-4 py-3 text-center text-purple-400"><%= ms.total_sets %></td>
-                            <td class="px-4 py-3 text-center text-blue-400"><%= ms.total_reps %></td>
-                            <td class="px-4 py-3 text-right text-green-400 font-bold"><%= Math.round(ms.total_volume) %></td>
+                            <td class="px-4 py-3 text-center text-green-300 font-semibold"><%= ms.workout_days %></td>
+                            <td class="px-4 py-3 text-center text-purple-300"><%= ms.total_sets %></td>
+                            <td class="px-4 py-3 text-center text-blue-300"><%= ms.total_reps %></td>
+                            <td class="px-4 py-3 text-right text-green-300 font-bold"><%= Math.round(ms.total_volume) %></td>
                         </tr>
                         <% }) %>
                     </tbody>
@@ -200,14 +200,14 @@
             muscleDistribution.forEach(m => {
                 const percentage = ((m.count / totalCount) * 100).toFixed(1);
             %>
-            <div class="bg-gradient-to-br from-orange-900/30 to-gray-800/50 backdrop-blur-lg p-4 rounded-xl border border-orange-500/30 shadow-lg">
-                <h4 class="font-semibold text-white mb-2"><%= m.muscle_name %></h4>
+            <div class="bg-gradient-to-br from-orange-500/20 to-pink-500/10 backdrop-blur-lg p-4 rounded-xl border border-orange-400/40 shadow-lg hover:shadow-xl smooth-transition">
+                <h4 class="font-semibold text-white mb-2"><%= m.muscle_name || 'Uncategorized' %></h4>
                 <div class="flex items-end justify-between">
                     <div>
-                        <p class="text-2xl font-bold text-orange-400"><%= m.count %></p>
-                        <p class="text-xs text-gray-400">exercises</p>
+                        <p class="text-2xl font-bold text-orange-300"><%= m.count %></p>
+                        <p class="text-xs text-gray-300/80">exercises</p>
                     </div>
-                    <p class="text-sm text-orange-300 font-semibold"><%= percentage %>%</p>
+                    <p class="text-sm text-orange-200 font-semibold"><%= percentage %>%</p>
                 </div>
             </div>
             <% }) %>

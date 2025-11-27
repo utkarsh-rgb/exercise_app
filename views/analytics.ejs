@@ -36,7 +36,9 @@
             </svg>
             Weight Progress
         </h3>
-        <canvas id="weightChart" height="200"></canvas>
+        <div style="position: relative; height: 250px;">
+            <canvas id="weightChart"></canvas>
+        </div>
     </div>
 
     <!-- BMI Progress Chart -->
@@ -47,7 +49,9 @@
             </svg>
             BMI Progress
         </h3>
-        <canvas id="bmiChart" height="200"></canvas>
+        <div style="position: relative; height: 250px;">
+            <canvas id="bmiChart"></canvas>
+        </div>
     </div>
 </div>
 
@@ -60,7 +64,7 @@
             </svg>
             Muscle Group Distribution
         </h3>
-        <div class="max-w-md mx-auto" style="height: 300px;">
+        <div class="max-w-md mx-auto" style="position: relative; height: 280px;">
             <canvas id="muscleDistributionChart"></canvas>
         </div>
     </div>
@@ -100,25 +104,33 @@
                 <!-- Max Weight Progress -->
                 <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
                     <h5 class="text-xs font-semibold mb-2 text-gray-600">Max Weight Over Time</h5>
-                    <canvas id="muscleWeightChart" height="180"></canvas>
+                    <div style="position: relative; height: 200px;">
+                        <canvas id="muscleWeightChart"></canvas>
+                    </div>
                 </div>
 
                 <!-- Total Volume Progress -->
                 <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
                     <h5 class="text-xs font-semibold mb-2 text-gray-600">Total Volume Over Time</h5>
-                    <canvas id="muscleVolumeChart" height="180"></canvas>
+                    <div style="position: relative; height: 200px;">
+                        <canvas id="muscleVolumeChart"></canvas>
+                    </div>
                 </div>
 
                 <!-- Sets Progress -->
                 <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
                     <h5 class="text-xs font-semibold mb-2 text-gray-600">Total Sets Over Time</h5>
-                    <canvas id="muscleSetsChart" height="180"></canvas>
+                    <div style="position: relative; height: 200px;">
+                        <canvas id="muscleSetsChart"></canvas>
+                    </div>
                 </div>
 
                 <!-- Reps Progress -->
                 <div class="bg-gray-50 rounded-lg p-3 border border-gray-200">
                     <h5 class="text-xs font-semibold mb-2 text-gray-600">Total Reps Over Time</h5>
-                    <canvas id="muscleRepsChart" height="180"></canvas>
+                    <div style="position: relative; height: 200px;">
+                        <canvas id="muscleRepsChart"></canvas>
+                    </div>
                 </div>
             </div>
         </div>

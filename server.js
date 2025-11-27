@@ -431,10 +431,12 @@ app.get("/stats", async (req, res) => {
 
         // Muscle distribution
         const [muscleDistribution] = await db.query(
-            `SELECT m.muscle_name, COUNT(*) AS count
+            `SELECT
+                COALESCE(m.muscle_name, 'Uncategorized') as muscle_name,
+                COUNT(*) AS count
              FROM exercises e
-             JOIN muscles m ON e.muscle = m.id
-             GROUP BY m.muscle_name
+             LEFT JOIN muscles m ON e.muscle = m.id
+             GROUP BY COALESCE(m.muscle_name, 'Uncategorized')
              ORDER BY count DESC`
         );
 

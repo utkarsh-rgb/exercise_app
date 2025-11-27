@@ -37,6 +37,19 @@ function formatDateTime(datetime) {
 // HOME PAGE
 app.get("/", async (req, res) => {
     try {
+        const now = new Date().toLocaleString("en-IN", {
+            day: "2-digit",
+            month: "short",
+            year: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+            second: "2-digit",
+            hour12: true
+        });
+
+        
+        const name = USER_PROFILE.name;
+        console.log(name);
         const [weightRows] = await db.query(
             "SELECT * FROM daily_weight ORDER BY date DESC LIMIT 1"
         );
@@ -69,6 +82,7 @@ app.get("/", async (req, res) => {
             weightDate,
             bmi,
             logs: formattedLogs,
+            currentDateTime: now,
             formatDateTime
         });
 

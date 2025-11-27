@@ -247,7 +247,9 @@ app.post("/add-muscle", async (req, res) => {
 // ANALYTICS PAGE
 app.get("/analytics", async (req, res) => {
     try {
-        // Get weight history
+        const selectedMuscle = req.query.muscle || null;
+
+        // Get weight history for chart
         const [weightHistory] = await db.query(
             "SELECT date, weight FROM daily_weight ORDER BY date ASC"
         );
@@ -255,38 +257,73 @@ app.get("/analytics", async (req, res) => {
         // Calculate BMI for each weight entry
         const weightData = weightHistory.map(row => ({
             date: row.date.toISOString().split('T')[0],
-            weight: row.weight,
-            bmi: (row.weight / Math.pow(USER_PROFILE.height / 100, 2)).toFixed(1)
+            weight: parseFloat(row.weight),
+            bmi: parseFloat((row.weight / Math.pow(USER_PROFILE.height / 100, 2)).toFixed(1))
         }));
 
-        // Get muscle group workout distribution
-        // Get muscle group workout distribution
-const [muscleDistribution] = await db.query(
-    `SELECT m.muscle_name, COUNT(*) AS count
-     FROM exercises e
-     JOIN muscles m ON e.muscle = m.id
-     GROUP BY m.muscle_name
-`
-);
-
-        console.log(muscleDistribution);
-
-        // Get recent workout logs with progression
-        const [workoutLogs] = await db.query(
-            "SELECT date, category, muscle, exercise, sets, reps, weight FROM exercises ORDER BY date DESC LIMIT 50"
+        // Get all muscles for dropdown
+        const [muscles] = await db.query(
+            `SELECT DISTINCT m.id, m.muscle_name, m.category
+             FROM muscles m
+             INNER JOIN exercises e ON e.muscle = m.id
+             ORDER BY m.category, m.muscle_name`
         );
 
-        // Get exercise progression (track max weight for each exercise over time)
-        const [exerciseProgression] = await db.query(
-            "SELECT exercise, date, MAX(weight) as max_weight FROM exercises GROUP BY exercise, date ORDER BY date ASC"
+        // Get muscle distribution for pie chart
+        const [muscleDistribution] = await db.query(
+            `SELECT
+                COALESCE(m.muscle_name, 'Uncategorized') as muscle_name,
+                COUNT(*) AS count
+             FROM exercises e
+             LEFT JOIN muscles m ON e.muscle = m.id
+             GROUP BY COALESCE(m.muscle_name, 'Uncategorized')
+             ORDER BY count DESC`
         );
+
+        // Muscle-specific data if a muscle is selected
+        let muscleProgressData = null;
+        let muscleName = null;
+
+        if (selectedMuscle) {
+            // Get muscle name
+            const [muscleInfo] = await db.query(
+                "SELECT muscle_name FROM muscles WHERE id = ?",
+                [selectedMuscle]
+            );
+            muscleName = muscleInfo.length ? muscleInfo[0].muscle_name : null;
+
+            // Get progression data for this muscle
+            const [progression] = await db.query(
+                `SELECT
+                    DATE(date) as workout_date,
+                    MAX(weight) as max_weight,
+                    SUM(sets) as total_sets,
+                    SUM(reps) as total_reps,
+                    SUM(weight * sets * reps) as total_volume
+                 FROM exercises
+                 WHERE muscle = ?
+                 GROUP BY DATE(date)
+                 ORDER BY workout_date ASC`,
+                [selectedMuscle]
+            );
+
+            muscleProgressData = progression.map(row => ({
+                date: row.workout_date.toISOString().split('T')[0],
+                maxWeight: parseFloat(row.max_weight),
+                totalSets: parseInt(row.total_sets),
+                totalReps: parseInt(row.total_reps),
+                totalVolume: parseFloat(row.total_volume)
+            }));
+        }
 
         res.render("analytics", {
-            profile: USER_PROFILE,
-            weightData,
-            muscleDistribution,
-            workoutLogs,
-            exerciseProgression
+            profile: { ...USER_PROFILE, age: calculateAge(USER_PROFILE.dob) },
+            weightData: JSON.stringify(weightData),
+            muscles,
+            muscleDistribution: JSON.stringify(muscleDistribution),
+            selectedMuscle,
+            muscleName,
+            muscleProgressData: muscleProgressData ? JSON.stringify(muscleProgressData) : null
         });
     } catch (err) {
         console.error("Analytics Error:", err);

@@ -1,174 +1,41 @@
-<%- include("partials/head", { title: "Choose Exercise" }) %>
+<%- include("partials/head", { title: "Exercises" }) %>
 <%- include("partials/header") %>
 
-<!-- Back Button -->
-<div class="mb-6">
-    <a href="/workout/<%= category %>" class="inline-flex items-center gap-2 text-gray-400 hover:text-white smooth-transition">
-        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-        </svg>
-        Back
-    </a>
-</div>
+<h2 class="text-xl font-bold mb-4">Select Exercise</h2>
 
-<!-- Page Title -->
-<div class="mb-6">
-    <h2 class="text-2xl md:text-3xl font-bold mb-2 capitalize"><%= category %> Day</h2>
-    <p class="text-gray-400">Select an exercise to log your workout</p>
-</div>
+<div class="space-y-4">
 
-<!-- Exercise List -->
-<% if (exercises.length === 0) { %>
-    <div class="bg-gray-800/50 backdrop-blur-lg p-8 rounded-2xl text-center border border-gray-700">
-        <svg class="w-16 h-16 mx-auto mb-3 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-        </svg>
-        <p class="text-gray-400 mb-4">No exercises found for this muscle</p>
-        <button onclick="document.getElementById('addExerciseForm').classList.toggle('hidden')" class="bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3 rounded-xl shadow-lg smooth-transition hover:shadow-xl">
-            Add Custom Exercise
-        </button>
+    <% exercises.forEach(ex => { %>
+    <div class="bg-gray-800 p-4 rounded">
+
+        <form action="/log-exercise" method="POST" class="space-y-2">
+
+            <p class="font-bold"><%= ex.exercise_name %></p>
+
+            <input type="hidden" name="category" value="<%= category %>">
+            <input type="hidden" name="muscle" value="<%= muscleId %>">
+            <input type="hidden" name="exercise" value="<%= ex.exercise_name %>">
+
+            <input type="date" name="date" class="w-full p-2 rounded text-black" required>
+            <input type="number" name="sets" class="w-full p-2 rounded text-black" placeholder="Sets" required>
+            <input type="number" name="reps" class="w-full p-2 rounded text-black" placeholder="Reps" required>
+            <input type="number" step="0.1" name="weight" class="w-full p-2 rounded text-black" placeholder="Weight (kg)" required>
+
+            <button class="w-full bg-blue-600 py-2 rounded">Log Exercise</button>
+        </form>
     </div>
-<% } else { %>
-    <div class="grid grid-cols-1 gap-3 mb-6">
-        <% exercises.forEach((ex, index) => { %>
-        <button onclick="showLogForm('<%= ex.exercise_name %>', '<%= ex.id %>')"
-                class="bg-gray-800/70 backdrop-blur-lg p-5 rounded-xl shadow-lg border border-gray-700 text-left smooth-transition hover:bg-gray-700 hover:border-purple-500 card-hover group"
-                style="animation-delay: <%= index * 0.05 %>s">
-            <div class="flex items-center justify-between">
-                <div class="flex items-center gap-3">
-                    <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
-                        </svg>
-                    </div>
-                    <h3 class="font-semibold text-lg"><%= ex.exercise_name %></h3>
-                </div>
-                <svg class="w-6 h-6 text-gray-400 group-hover:text-purple-400 smooth-transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                </svg>
-            </div>
-        </button>
-        <% }) %>
-    </div>
+    <% }) %>
 
-    <!-- Add Custom Exercise Button -->
-    <button onclick="document.getElementById('addExerciseForm').classList.toggle('hidden')"
-            class="w-full bg-gray-800/50 backdrop-blur-lg p-4 rounded-xl border-2 border-dashed border-gray-600 text-gray-400 smooth-transition hover:border-purple-500 hover:text-purple-400">
-        <div class="flex items-center justify-center gap-2">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-            Add Custom Exercise
-        </div>
-    </button>
-<% } %>
-
-<!-- Add Exercise Form (Hidden by default) -->
-<div id="addExerciseForm" class="hidden mt-6 bg-gray-800/90 backdrop-blur-lg p-6 rounded-2xl shadow-2xl border border-gray-700">
-    <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
-        <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-        </svg>
-        Add Custom Exercise
-    </h3>
-    <form action="/add-custom-exercise" method="POST" class="space-y-4">
-        <input type="hidden" name="muscleId" value="<%= muscleId %>">
-
-        <div>
-            <label class="block text-sm font-medium mb-2 text-gray-300">Exercise Name</label>
-            <input type="text" name="exerciseName"
-                   class="w-full p-3 rounded-xl bg-gray-900/50 border border-gray-600 text-white focus:border-purple-500 smooth-transition"
-                   placeholder="e.g., Bench Press" required>
-        </div>
-
-        <div class="flex gap-3">
-            <button type="submit" class="flex-1 bg-gradient-to-r from-purple-500 to-pink-500 py-3 rounded-xl font-medium shadow-lg smooth-transition hover:shadow-xl hover:scale-105">
-                Add Exercise
-            </button>
-            <button type="button" onclick="document.getElementById('addExerciseForm').classList.add('hidden')"
-                    class="px-6 bg-gray-700 py-3 rounded-xl font-medium smooth-transition hover:bg-gray-600">
-                Cancel
-            </button>
-        </div>
-    </form>
 </div>
 
-<!-- Log Exercise Modal (Hidden by default) -->
-<div id="logExerciseModal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-    <div class="bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 max-w-md w-full max-h-[90vh] overflow-y-auto">
-        <div class="p-6">
-            <div class="flex justify-between items-center mb-6">
-                <h3 class="text-xl font-bold" id="modalExerciseName">Log Exercise</h3>
-                <button onclick="closeLogForm()" class="text-gray-400 hover:text-white smooth-transition">
-                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                    </svg>
-                </button>
-            </div>
+<h2 class="text-lg font-bold mt-6 mb-2">Add Custom Exercise</h2>
 
-            <form action="/log-exercise" method="POST" class="space-y-4">
-                <input type="hidden" name="category" value="<%= category %>">
-                <input type="hidden" name="muscle" id="modalMuscle" value="<%= muscleId %>">
-                <input type="hidden" name="exercise" id="modalExercise" value="">
+<form action="/add-custom-exercise" method="POST" class="space-y-2">
+    <input type="hidden" name="muscleId" value="<%= muscleId %>">
 
-                <div>
-                    <label class="block text-sm font-medium mb-2 text-gray-300 flex items-center gap-2">
-                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                        Date
-                    </label>
-                    <input type="date" name="date"
-                           class="w-full p-3 rounded-xl bg-gray-900/50 border border-gray-600 text-white focus:border-purple-500 smooth-transition"
-                           value="<%= new Date().toISOString().split('T')[0] %>" required>
-                </div>
+    <input type="text" name="exerciseName" class="w-full p-2 rounded text-black" placeholder="Exercise name" required>
 
-                <div class="grid grid-cols-3 gap-3">
-                    <div>
-                        <label class="block text-sm font-medium mb-2 text-gray-300">Sets</label>
-                        <input type="number" name="sets" min="1"
-                               class="w-full p-3 rounded-xl bg-gray-900/50 border border-gray-600 text-white focus:border-purple-500 smooth-transition text-center"
-                               placeholder="3" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2 text-gray-300">Reps</label>
-                        <input type="number" name="reps" min="1"
-                               class="w-full p-3 rounded-xl bg-gray-900/50 border border-gray-600 text-white focus:border-purple-500 smooth-transition text-center"
-                               placeholder="12" required>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium mb-2 text-gray-300">Weight (kg)</label>
-                        <input type="number" name="weight" min="0" step="0.5"
-                               class="w-full p-3 rounded-xl bg-gray-900/50 border border-gray-600 text-white focus:border-purple-500 smooth-transition text-center"
-                               placeholder="50" required>
-                    </div>
-                </div>
-
-                <button type="submit" class="w-full bg-gradient-to-r from-purple-500 to-pink-500 py-4 rounded-xl font-medium shadow-lg smooth-transition hover:shadow-xl hover:scale-105 mt-6">
-                    Log Workout
-                </button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<script>
-    function showLogForm(exerciseName, exerciseId) {
-        document.getElementById('modalExerciseName').textContent = 'Log ' + exerciseName;
-        document.getElementById('modalExercise').value = exerciseName;
-        document.getElementById('logExerciseModal').classList.remove('hidden');
-    }
-
-    function closeLogForm() {
-        document.getElementById('logExerciseModal').classList.add('hidden');
-    }
-
-    // Close modal on background click
-    document.getElementById('logExerciseModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            closeLogForm();
-        }
-    });
-</script>
+    <button class="w-full bg-green-600 py-2 rounded">Add Exercise</button>
+</form>
 
 <%- include("partials/footer") %>

@@ -37,6 +37,8 @@ function formatDateTime(datetime) {
 // HOME PAGE
 app.get("/", async (req, res) => {
     try {
+
+        // Current IST time
         const now = new Date().toLocaleString("en-IN", {
             day: "2-digit",
             month: "short",
@@ -47,21 +49,33 @@ app.get("/", async (req, res) => {
             hour12: true
         });
 
-        
         const name = USER_PROFILE.name;
-        console.log(name);
+
+        // Fetch latest weight entry
         const [weightRows] = await db.query(
-            "SELECT * FROM daily_weight ORDER BY date DESC LIMIT 1"
+            "SELECT * FROM daily_weight ORDER BY date DESC, created_at DESC LIMIT 1"
         );
 
         const [logs] = await db.query(
             "SELECT e.*, m.muscle_name FROM exercises e LEFT JOIN muscles m ON e.muscle = m.id ORDER BY e.date DESC"
         );
 
-        let weight = weightRows.length ? weightRows[0].weight : null;
-        let weightDate = weightRows.length ? weightRows[0].date : null;
-        let bmi = null;
+        let weightData = weightRows.length ? weightRows[0] : null;
 
+        let weight = weightData ? weightData.weight : null;
+        let weightDate = weightData ? weightData.date : null;
+
+        // Convert MySQL timestamp to IST
+        function toIST(dateObj) {
+            if (!dateObj) return null;
+            return dateObj.toLocaleString("en-IN", { timeZone: "Asia/Kolkata" });
+        }
+
+        let createdAtIST = weightData ? toIST(weightData.created_at) : null;
+
+        console.log("Created At IST:", createdAtIST);
+
+        let bmi = null;
         if (weight) {
             let m = USER_PROFILE.height / 100;
             bmi = (weight / (m * m)).toFixed(1);
@@ -70,7 +84,7 @@ app.get("/", async (req, res) => {
         // Calculate age
         const age = calculateAge(USER_PROFILE.dob);
 
-        // Format logs with proper time
+        // Format exercise logs
         const formattedLogs = logs.map(log => ({
             ...log,
             formattedDateTime: formatDateTime(log.date)
@@ -80,6 +94,7 @@ app.get("/", async (req, res) => {
             profile: { ...USER_PROFILE, age },
             currentWeight: weight,
             weightDate,
+            weightCreatedAt: createdAtIST,   // <---- ADD THIS TO YOUR EJS
             bmi,
             logs: formattedLogs,
             currentDateTime: now,
@@ -91,6 +106,7 @@ app.get("/", async (req, res) => {
         res.send("Error loading Homepage");
     }
 });
+
 
 
 // PROFILE PAGE

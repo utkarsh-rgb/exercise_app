@@ -220,9 +220,16 @@ app.get("/analytics", async (req, res) => {
         }));
 
         // Get muscle group workout distribution
-        const [muscleDistribution] = await db.query(
-            "SELECT muscle, COUNT(*) as count FROM exercises GROUP BY muscle ORDER BY count DESC"
-        );
+        // Get muscle group workout distribution
+const [muscleDistribution] = await db.query(
+    `SELECT m.muscle_name, COUNT(*) AS count
+     FROM exercises e
+     JOIN muscles m ON e.muscle = m.id
+     GROUP BY m.muscle_name
+`
+);
+
+        console.log(muscleDistribution);
 
         // Get recent workout logs with progression
         const [workoutLogs] = await db.query(
